@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <cmath>
 using namespace std;
 
@@ -7,9 +8,6 @@ using namespace std;
 #define MAXCOL 100000
 
 // Useful macros
-#define check(a,b) (a==b)?1:0
-#define itos(a) #a
-#define acatb(a,b) a##b
 #define clr system("clear")
 
 // Collision heap stack
@@ -58,7 +56,7 @@ int stoi(char s[]) {
     return ans;
 }
 
-int cntplace(char s[]) {
+template <class strtp> int cntplace(strtp s) {
     int i;
     for(i=0;s[i]!='\0';i++) {
         ;
@@ -70,29 +68,36 @@ int cntplace(char s[]) {
 int *extract(double m) {
     // Create a pointer to array[0] and allocate 2 free spaces in RAM for array.
     int *coord;
-    coord=new (nothrow) int [3];
+    coord=new int [3];
 
-    char ms[]=itos(m);
-    char msd[]=itos(m-floor(m));
+    string ms=to_string(m);
+    string msd=to_string(m-floor(m));
     if(ms[0]=='-') {
         ms[0]='0';
     }
 
     coord[0]=floor(m);
     coord[1]=stoi(msd);
-    coord[2]=pow(10,cntplace(ms));
+    coord[2]=pow(10,cntplace<string>(ms));
     
     return coord;
 }
 
 // Draw a line on board with the x and y positions given, along with the length of the line and the slope.
-void drawl(char board[BUF][BUF],int x=0, int y=0,int len=1,double m=1) {
+template <class T> void drawl(char board[BUF][BUF],int x=0, int y=0,int len=1,T m=1) {
     board[x][y]='@';
-    int mx=extract(m)[1];
-    int my=extract(m)[2];
-    mx/=gcd(mx,my);
-    my/=gcd(mx,my);
-    mx+=extract(m)[0]*my;
+    int mx;
+    int my;
+    if(typeid(m).name()!=typeid(mx).name()) {
+        mx=extract(m)[1];
+        my=extract(m)[2];
+        mx/=gcd(mx,my);
+        my/=gcd(mx,my);
+        mx+=extract(m)[0]*my;
+    } else {
+        mx=m;
+        my=1;
+    }
     for(int i=0;i<len;i++) {
         for(int j=1;j<=my;j++) {
             for(int k=1;k<=mx;k++) {
@@ -119,16 +124,6 @@ void crtcol(void (*draw)(char [BUF][BUF],int,int,int,double),char colboard[BUF][
             }
         }
     }
-}
-
-int alloc(int foo[]) {
-    long unsigned int i=0;
-
-    // -1 will be used as a value for deleted collisions.
-    for(i;i<(sizeof(foo)/sizeof(foo[0]))&&foo[i]!=-1;i++) {
-        ;
-    }
-    return i;
 }
 
 void delcol(char colboard[BUF][BUF],int x[MAXCOL], int y[MAXCOL]) {
