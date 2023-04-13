@@ -1,4 +1,6 @@
 # TermGraphics
+HAVE TO UPDATE FUNCTION SECTION AND WARNING SECTION(SHOULD HAVE NO MORE WARNINGS UPON COMPILATION)
+
 Create graphics in the terminal via C++
 
 WARNING: This library only creates terminal based 2d graphics and is very basic. Upon compilation you may see a warning and a note(These are not to be worried about as these don't actually produce errors in the code). You can only have at most 100,000 collision blocks or you will possibly get a segment fault(core dump).
